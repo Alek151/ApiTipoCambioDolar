@@ -41,4 +41,24 @@ router.get('/dolar', async (req, res, next) => {
   }
 });
 
+router.post("/datos", async (req, res, next) => {
+  try {
+    const userlogin = "admin"
+    const passwordlogin = "123"
+    const authorizationKeyVerified = "ABC123"
+    const username = req.body.username;
+    const password = req.body.password;
+    const authorizationKey = req.headers.authorization;
+    if(username == userlogin && password == passwordlogin && authorizationKey == authorizationKeyVerified  ) {
+      const response = { usuario: username, clave: password, response: "Login correcto" };   
+      res.status(200).json(response);
+    } else {
+      res.status(403).send('Login incorrecto, revisa tus datos. ');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(404).send('Ocurrió un error durante el procesamiento de la solicitud.');
+  }
+});
+
 module.exports = router;
