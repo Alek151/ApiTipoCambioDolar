@@ -1,7 +1,6 @@
 const express = require('express');
 const axios = require('axios');
 const xml2js = require('xml2js');
-const parser = new xml2js.Parser();
 const router = express.Router();
 
 router.get('/dolar', async (req, res, next) => {
@@ -23,7 +22,6 @@ router.get('/dolar', async (req, res, next) => {
     const tipoCambio = result['soap:Envelope']['soap:Body'][0].TipoCambioDiaStringResponse[0].TipoCambioDiaStringResult[0];
     res.set('Content-Type', 'application/json');
     const responseDetected = tipoCambio;
-
     xml2js.parseString(responseDetected, (err, result) => {
         if (err) {
           console.error(err);
@@ -32,7 +30,6 @@ router.get('/dolar', async (req, res, next) => {
           // Accedemos a los valores de fecha y referencia
           const fecha = result.InfoVariable.CambioDolar[0].VarDolar[0].fecha[0];
           const referencia = result.InfoVariable.CambioDolar[0].VarDolar[0].referencia[0];
-          
           // Devolvemos los valores como un objeto JSON
           const jsonResponse = { fecha, referencia };
           res.send(jsonResponse);
