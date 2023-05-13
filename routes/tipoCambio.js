@@ -3,6 +3,19 @@ const axios = require('axios');
 const xml2js = require('xml2js');
 const router = express.Router();
 
+// Ruta GET para obtener el tipo de cambio actual
+/**
+ * @swagger
+ * /tipoCambio/dolar:
+ *   get:
+ *     summary: Obtiene el tipo de cambio actual
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Retorna el tipo de cambio actual
+ */
+
 router.get('/dolar', async (req, res, next) => {
   try {
     const xmlRequest = `<?xml version="1.0" encoding="utf-8"?>
@@ -40,6 +53,37 @@ router.get('/dolar', async (req, res, next) => {
     next(error);
   }
 });
+/**
+ * @swagger
+ * /tipoCambio/datos:
+ *   post:
+ *     description: Valida los datos de inicio de sesión del usuario
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: username
+ *         description: Nombre de usuario
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         description: Contraseña del usuario
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Datos de inicio de sesión correctos
+ *       403:
+ *         description: Datos inválidos, acceso denegado.
+ *       401:
+ *         description: Error al procesar la solicitud
+ *     security:
+ *       - authorization: []
+ */
+
+
+
 
 router.post("/datos", async (req, res, next) => {
   try {
@@ -53,12 +97,14 @@ router.post("/datos", async (req, res, next) => {
       const response = { usuario: username, clave: password, response: "Login correcto" };   
       res.status(200).json(response);
     } else {
-      res.status(403).send('Login incorrecto, revisa tus datos. ');
+      res.status(403).send('Datos invalidos, acceso denegado. ');
     }
   } catch (error) {
     console.error(error);
-    res.status(404).send('Ocurrió un error durante el procesamiento de la solicitud.');
+    res.status(401).send('Ocurrió un error durante el procesamiento de la solicitud.');
   }
 });
 
 module.exports = router;
+
+
