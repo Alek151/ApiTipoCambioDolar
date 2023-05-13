@@ -3,6 +3,8 @@ const axios = require('axios');
 const xml2js = require('xml2js');
 const router = express.Router();
 
+//unicamente utilizado para swagger el apartado de los siguientes comentarios.
+
 // Ruta GET para obtener el tipo de cambio actual
 /**
  * @swagger
@@ -14,6 +16,8 @@ const router = express.Router();
  *     responses:
  *       200:
  *         description: Retorna el tipo de cambio actual
+ *       404:
+ *         description: No se estableció correctamente la petición
  */
 
 router.get('/dolar', async (req, res, next) => {
@@ -53,6 +57,7 @@ router.get('/dolar', async (req, res, next) => {
     next(error);
   }
 });
+
 /**
  * @swagger
  * /tipoCambio/datos:
@@ -61,16 +66,22 @@ router.get('/dolar', async (req, res, next) => {
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: username
- *         description: Nombre de usuario
- *         in: formData
+ *       - name: authorization
+ *         description: clave de entrada
+ *         in: header
  *         required: true
  *         type: string
- *       - name: password
- *         description: Contraseña del usuario
- *         in: formData
+ *       - name: body
+ *         description: Datos de inicio de sesión del usuario
+ *         in: body
  *         required: true
- *         type: string
+ *         schema:
+ *           type: object
+ *           properties:
+ *             username:
+ *               type: string
+ *             password:
+ *               type: string
  *     responses:
  *       200:
  *         description: Datos de inicio de sesión correctos
@@ -78,11 +89,7 @@ router.get('/dolar', async (req, res, next) => {
  *         description: Datos inválidos, acceso denegado.
  *       401:
  *         description: Error al procesar la solicitud
- *     security:
- *       - authorization: []
  */
-
-
 
 
 router.post("/datos", async (req, res, next) => {
